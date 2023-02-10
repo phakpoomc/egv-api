@@ -222,15 +222,54 @@ app.get('/json/:name/export', async (req, res) => {
         let c = req.query.cycle;
         let t = req.query.type;
 
-        let data = {};
+        let data = {'export': []};
 
         if(t == "year")
         {
-            data = await db.getData('/db/' + req.params.name + '/' + y);
+            // data = await db.getData('/db/' + req.params.name + '/' + y);
+
+            for(let i=0; i<12; i++)
+            {
+                let o = {'id': i};
+
+                if(e == "true")
+                {
+                    o['energy'] = Math.floor(Math.random()*100);
+                }
+                if(p == "true")
+                {
+                    o['power'] = Math.floor(Math.random()*100);
+                }
+                if(c == "true")
+                {
+                    o['cycle'] = Math.floor(Math.random()*100);
+                }
+
+                data['export'].push(o);
+            }
         }
         else if(t == 'month')
         {
-            data = await db.getData('/db/' + req.params.name + '/' + y + '/' + m);
+            // data = await db.getData('/db/' + req.params.name + '/' + y + '/' + m);
+            for(let i=0; i<31; i++)
+            {
+                let o = {'id': i};
+
+                if(e == "true")
+                {
+                    o['energy'] = Math.floor(Math.random()*100);
+                }
+                if(p == "true")
+                {
+                    o['power'] = Math.floor(Math.random()*100);
+                }
+                if(c == "true")
+                {
+                    o['cycle'] = Math.floor(Math.random()*100);
+                }
+
+                data['export'].push(o);
+            }
         }
          else
         {
@@ -240,7 +279,7 @@ app.get('/json/:name/export', async (req, res) => {
 
         // Process data
         // let data = await db.getData('/db/' + req.params.name);
-        // res.send(JSON.stringify({'status': 'success', 'return': data}, null, 2));
+        res.send(JSON.stringify({'status': 'success', 'return': data}, null, 2));
     }
     else
     {
@@ -253,15 +292,28 @@ app.get('/json/:name/spc', async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     if(existedPath.includes("/" + req.params.name))
     {
-        let y = req.query.year;
-        let m = req.query.month;
-        let d = req.query.date;
+        // let y = req.query.year;
+        // let m = req.query.month;
+        // let d = req.query.date;
 
-        let data = await db.getData('/db/' + req.params.name + '/' + y + '/' + m + '/' + d);
+        // let data = await db.getData('/db/' + req.params.name + '/' + y + '/' + m + '/' + d);
 
+        let s = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let p = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let c = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         // Process data
+
+        for(let i=0; i<24; i++)
+        {
+            s[i] += Math.floor(Math.random()*10);
+            p[i] += Math.floor(Math.random()*10);
+            c[i] += Math.floor(Math.random()*10);
+        }
+
+        let data = {'speed': s, 'power': p, 'cycle': c};
+        
         // let data = await db.getData('/db/' + req.params.name);
-        // res.send(JSON.stringify({'status': 'success', 'return': data}, null, 2));
+        res.send(JSON.stringify({'status': 'success', 'return': data}, null, 2));
     }
     else
     {
